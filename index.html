@@ -15,8 +15,11 @@
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    // 追いかけ広告（リマーケティング）には使わない。申込み件数の計測だけに使う
+    gtag('consent', 'default', { ad_personalization: 'denied' });
+    gtag('set', 'allow_ad_personalization_signals', false);
     gtag('js', new Date());
-    gtag('config', 'AW-18577068621', { allow_ad_personalization_signals: false }); // 追いかけ広告（リマーケティング）用のデータは集めない
+    gtag('config', 'AW-18577068621');
   </script>
 
   <script type="application/ld+json">
