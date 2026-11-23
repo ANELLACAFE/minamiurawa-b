@@ -3,9 +3,9 @@
 // Apps Script（B型問い合わせ一覧）の「ウェブアプリURL」を公開後にここへ入れる
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbx_V5DqSv7ZApbpPDVXyFTYs58oI9IoWFva1AgOAxg64M5kG8Z3LhwLI4yzErdExjyidA/exec';
 
-// Google広告の「コンバージョンラベル」を作成後にここへ入れる（例: 'AW-1234567890/AbCdEf'）
+// Google広告の「コンバージョンラベル」（form＝「B型LP 見学申込み（フォーム）」。tel・line は未作成）
 var ADS_CONVERSIONS = {
-  form: '',
+  form: 'AW-18577068621/FLmzCLbUjb4dEM2knppF',
   tel: '',
   line: ''
 };
@@ -29,7 +29,7 @@ function getStored(k) {
 function sendConversion(kind) {
   var label = ADS_CONVERSIONS[kind];
   if (label && typeof window.gtag === 'function') {
-    window.gtag('event', 'conversion', { send_to: label });
+    window.gtag('event', 'conversion', { send_to: label, value: 1.0, currency: 'JPY' });
   }
 }
 
