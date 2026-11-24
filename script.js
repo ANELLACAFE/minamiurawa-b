@@ -3,12 +3,14 @@
 // Apps Script（B型問い合わせ一覧）の「ウェブアプリURL」を公開後にここへ入れる
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbx_V5DqSv7ZApbpPDVXyFTYs58oI9IoWFva1AgOAxg64M5kG8Z3LhwLI4yzErdExjyidA/exec';
 
-// Google広告の「コンバージョンラベル」（form＝「B型LP 見学申込み（フォーム）」。tel・line は未作成）
+// Google広告の「コンバージョンラベル」（form＝「B型LP 見学申込み（フォーム）」。tel は未作成）
 var ADS_CONVERSIONS = {
   form: 'AW-18577068621/FLmzCLbUjb4dEM2knppF',
-  tel: '',
-  line: ''
+  tel: ''
 };
+
+// パソコン内の見本表示（localhost）では、問い合わせ一覧へは送らない（試し押しで本物の行が増えないように）
+var IS_PREVIEW = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 
 // 広告から来たかどうかを覚えておく（gclid＝Google広告のクリック番号）
 (function rememberSource() {
@@ -33,12 +35,9 @@ function sendConversion(kind) {
   }
 }
 
-// 電話・LINEボタンが押されたら計測
+// 電話ボタンが押されたら計測（ラベル未作成のあいだは何もしない）
 document.querySelectorAll('[data-track="tel"]').forEach(function (a) {
   a.addEventListener('click', function () { sendConversion('tel'); });
-});
-document.querySelectorAll('[data-track="line"]').forEach(function (a) {
-  a.addEventListener('click', function () { sendConversion('line'); });
 });
 
 // ===== フォーム =====
@@ -84,6 +83,13 @@ form.addEventListener('submit', function (ev) {
   var problems = checkForm();
   if (problems.length) {
     showError('次の項目を確認してください：' + problems.join('、'));
+    return;
+  }
+
+  if (IS_PREVIEW) {
+    form.hidden = true;
+    thanks.hidden = false;
+    thanks.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
 
